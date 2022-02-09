@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: blazork8s3-deployment
+spec: 
+  replicas: 5
+  selector:
+    matchLabels:
+      app: blazork8s3
+  template: 
+    metadata:
+      labels: 
+        app: blazork8s3
+    spec: 
+      containers: 
+      - name: blazork8s3
+        image: bartvanhoey/blazork8s3:#{Build.BuildId}#
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blazork8s3-service
+spec:
+  selector:
+    app: blazork8s3
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
